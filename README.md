@@ -46,6 +46,16 @@ output/
 - **Yeast** inferred from the brewery (e.g. WLP028 Edinburgh Ale for William Younger recipes)
 - **Notes** including the blog's reported IBU/SRM/ABV, attenuation, pitching temperature, blog tags, and optionally the full narrative text from the post
 
+## Ingredient assumptions
+
+The blog recipes use ingredient names as they appear in original brewing logs, which don't always map cleanly to modern BeerXML fermentable names. The script classifies each ingredient into one of three tiers:
+
+- **Confident match** — e.g. "pale malt" → Pale Malt (2 Row) UK, "No. 3 invert" → No. 3 Invert Sugar. No note in the recipe.
+- **Inferred match** — genuinely ambiguous names where we've made a reasonable interpretation, e.g. "grits" → Corn Grits (could be rice or oat grits), "SA malt" → Pale Malt. Noted in the recipe's Assumptions section as `interpreted as ...`.
+- **Unknown** — names we can't confidently map. These appear as `UNKNOWN: ...` in the recipe with a generic 70% yield fallback. Currently only two remain: "Beane's grist" (an obscure historical ingredient) and "Fuggles hop back" (a misclassified hop addition in the source data).
+
+Assumptions are listed in each recipe's `<NOTES>` field under `--- Assumptions ---`.
+
 ## Experimental: era-adjusted hop alpha acids
 
 The blog uses BeerSmith's modern default alpha acid values for all recipes regardless of era (e.g. Fuggles 4.5%, Goldings 5.0%). As noted in the author's books, the hop quantities come from the original logs but no attempt is made to account for how hops have changed over time. The author also points out that virtually no brewing logs record hop additions — most timings are estimates — and that getting a perfect match for 19th century malt is equally tricky.
