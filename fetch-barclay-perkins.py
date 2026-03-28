@@ -892,7 +892,8 @@ def main():
                 te.feed(content)
                 narrative = te.get_text()
 
-            tags = [c['term'] for c in entry.get('category', [])]
+            tags = [c['term'] for c in entry.get('category', [])
+                    if c['term'] != 'beer recipes']
 
             for table in tp.tables:
                 recipe_data = parse_recipe_table(table)
