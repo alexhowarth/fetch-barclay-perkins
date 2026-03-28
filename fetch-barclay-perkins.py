@@ -396,7 +396,7 @@ class TextExtractor(HTMLParser):
 
     def handle_data(self, data):
         if not self.in_table and not self.in_script:
-            self.current += data
+            self.current += re.sub(r'\s+', ' ', data)
 
     def get_text(self):
         if self.current.strip():
