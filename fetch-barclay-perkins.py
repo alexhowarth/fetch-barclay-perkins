@@ -112,28 +112,36 @@ HISTORICAL_ALPHAS = {
 }
 
 # ─── Fermentable Database ────────────────────────────────────────────────────
-# (keyword_pattern, name, type, yield%, color_SRM, origin)
+# (keyword_pattern, name, type, yield%, color_SRM, origin[, inferred])
+# Optional 7th element 'inferred' marks ambiguous interpretations that will
+# be noted in the recipe Assumptions section.
 
 FERMENTABLE_DB = [
     # Base malts
-    (r'pale\s*malt|pale\s*ale\s*malt', 'Pale Malt (2 Row) UK', 'Grain', 78.0, 3.0, 'United Kingdom'),
+    (r'pale\s*(ale\s*)?malt|\bPA\s*malt', 'Pale Malt (2 Row) UK', 'Grain', 78.0, 3.0, 'United Kingdom'),
     (r'lager\s*malt', 'Lager Malt', 'Grain', 80.0, 2.0, 'Germany'),
-    (r'mild\s*malt', 'Mild Malt', 'Grain', 75.0, 4.0, 'United Kingdom'),
+    (r'mild\s*(ale\s*)?malt|\bMA\s*malt', 'Mild Malt', 'Grain', 75.0, 4.0, 'United Kingdom'),
     (r'maris\s*otter', 'Maris Otter Pale Malt', 'Grain', 78.0, 3.0, 'United Kingdom'),
     (r'pilsner\s*malt|pilsener', 'Pilsner Malt', 'Grain', 81.0, 2.0, 'Germany'),
     (r'vienna\s*malt', 'Vienna Malt', 'Grain', 78.0, 4.0, 'Germany'),
     (r'munich\s*malt', 'Munich Malt', 'Grain', 77.0, 9.0, 'Germany'),
     (r'wheat\s*malt', 'Wheat Malt', 'Grain', 80.0, 2.0, 'Germany'),
-    (r'oat\s*malt', 'Oat Malt', 'Grain', 70.0, 3.0, 'United Kingdom'),
-    (r'rye\s*malt', 'Rye Malt', 'Grain', 75.0, 4.0, 'Germany'),
+    (r'oat\s*malt|malted\s*oats', 'Oat Malt', 'Grain', 70.0, 3.0, 'United Kingdom'),
+    (r'rye\s*malt|malted\s*rye', 'Rye Malt', 'Grain', 75.0, 4.0, 'Germany'),
+    (r'white\s*malt', 'Pale Malt (2 Row) UK', 'Grain', 78.0, 2.0, 'United Kingdom'),
+    (r'\bSA\s*malt', 'Pale Malt (2 Row) UK', 'Grain', 78.0, 3.0, 'United Kingdom', 'inferred'),
+    (r'high[- ]?dried\s*malt', 'High Dried Malt', 'Grain', 70.0, 10.0, 'United Kingdom'),
+    (r'enzymic\s*malt', 'Enzymic Malt', 'Grain', 78.0, 3.0, 'United Kingdom'),
     # Specialty malts
     (r'amber\s*malt', 'Amber Malt', 'Grain', 70.0, 22.0, 'United Kingdom'),
     (r'brown\s*malt', 'Brown Malt', 'Grain', 70.0, 65.0, 'United Kingdom'),
-    (r'chocolate\s*malt', 'Chocolate Malt', 'Grain', 60.0, 350.0, 'United Kingdom'),
+    (r'choc(olate)?\.?\s*malt|\bchocolate\b', 'Chocolate Malt', 'Grain', 60.0, 350.0, 'United Kingdom'),
     (r'black\s*(patent|malt)', 'Black Patent Malt', 'Grain', 55.0, 500.0, 'United Kingdom'),
     (r'roast(ed)?\s*barley', 'Roasted Barley', 'Grain', 55.0, 300.0, 'United Kingdom'),
     (r'crystal\s*malt|caramalt', 'Crystal Malt', 'Grain', 75.0, 60.0, 'United Kingdom'),
     (r'cara-?pils|carapils', 'CaraPils/Dextrine', 'Grain', 72.0, 2.0, 'United Kingdom'),
+    (r'carafa\s*(special\s*)?III', 'Carafa Special III', 'Grain', 55.0, 525.0, 'Germany'),
+    (r'caraamber|cara[- ]?amber', 'CaraAmber', 'Grain', 72.0, 30.0, 'Germany'),
     (r'Special\s*B', 'Special B Malt', 'Grain', 68.0, 180.0, 'Belgium'),
     (r'biscuit', 'Biscuit Malt', 'Grain', 75.0, 23.0, 'Belgium'),
     (r'aromatic', 'Aromatic Malt', 'Grain', 72.0, 26.0, 'Belgium'),
@@ -143,19 +151,33 @@ FERMENTABLE_DB = [
     # Adjuncts
     (r'flaked\s*barley', 'Flaked Barley', 'Adjunct', 70.0, 2.0, 'United Kingdom'),
     (r'flaked\s*maize|flaked\s*corn', 'Flaked Maize', 'Adjunct', 80.0, 1.0, 'US'),
-    (r'flaked\s*oats', 'Flaked Oats', 'Adjunct', 70.0, 1.0, 'United Kingdom'),
+    (r'flaked\s*oats?', 'Flaked Oats', 'Adjunct', 70.0, 1.0, 'United Kingdom'),
     (r'flaked\s*rice', 'Flaked Rice', 'Adjunct', 80.0, 1.0, 'US'),
+    (r'flaked\s*rye', 'Flaked Rye', 'Adjunct', 65.0, 3.0, 'United Kingdom'),
     (r'flaked\s*wheat', 'Flaked Wheat', 'Adjunct', 77.0, 2.0, 'United Kingdom'),
     (r'torrified\s*wheat|torrefied\s*wheat', 'Torrified Wheat', 'Adjunct', 77.0, 2.0, 'United Kingdom'),
     (r'torrified\s*barley|torrefied\s*barley', 'Torrified Barley', 'Adjunct', 70.0, 2.0, 'United Kingdom'),
+    (r'pearl\s*barley', 'Pearl Barley', 'Adjunct', 60.0, 2.0, 'United Kingdom'),
+    (r'ground\s*barley', 'Ground Barley', 'Adjunct', 65.0, 2.0, 'United Kingdom'),
+    (r'barley\s*(meal|flour)', 'Barley Flour', 'Adjunct', 65.0, 2.0, 'United Kingdom'),
+    (r'wheat\s*flour', 'Wheat Flour', 'Adjunct', 70.0, 2.0, 'United Kingdom'),
+    (r'^oats?$', 'Flaked Oats', 'Adjunct', 70.0, 1.0, 'United Kingdom'),
+    (r'^wheat$', 'Raw Wheat', 'Adjunct', 77.0, 2.0, 'United Kingdom'),
+    (r'^maize$', 'Flaked Maize', 'Adjunct', 80.0, 1.0, 'US'),
+    (r'^rice$', 'Flaked Rice', 'Adjunct', 80.0, 1.0, 'US'),
     (r'rice\s*grits', 'Rice Grits', 'Adjunct', 80.0, 1.0, 'US'),
+    (r'^grits$', 'Corn Grits', 'Adjunct', 80.0, 1.0, 'US', 'inferred'),
     (r'corn\s*grits|maize\s*grits', 'Corn Grits', 'Adjunct', 80.0, 1.0, 'US'),
+    # Extracts
+    (r'diastatic\s*malt\s*extract', 'Diastatic Malt Extract', 'Extract', 80.0, 8.0, 'United Kingdom'),
+    (r'malt\s*extract', 'Malt Extract, Light', 'Extract', 80.0, 8.0, 'United Kingdom'),
     # Sugars (check No. X invert before generic invert)
     (r'No\.?\s*1\s*invert|invert\s*No\.?\s*1', 'No. 1 Invert Sugar', 'Sugar', 100.0, 1.0, 'United Kingdom'),
     (r'No\.?\s*2\s*invert|invert\s*No\.?\s*2', 'No. 2 Invert Sugar', 'Sugar', 100.0, 30.0, 'United Kingdom'),
     (r'No\.?\s*3\s*invert|invert\s*No\.?\s*3', 'No. 3 Invert Sugar', 'Sugar', 100.0, 75.0, 'United Kingdom'),
     (r'No\.?\s*4\s*invert|invert\s*No\.?\s*4', 'No. 4 Invert Sugar', 'Sugar', 100.0, 150.0, 'United Kingdom'),
     (r'invert\s*sugar|invert', 'Invert Sugar', 'Sugar', 100.0, 30.0, 'United Kingdom'),
+    (r'fructose', 'Fructose', 'Sugar', 100.0, 0.0, 'United Kingdom'),
     (r'glucose|dextrose|corn\s*sugar', 'Glucose (Dextrose)', 'Sugar', 100.0, 0.0, 'US'),
     (r'golden\s*syrup', 'Golden Syrup', 'Sugar', 95.0, 3.0, 'United Kingdom'),
     (r'treacle', 'Treacle', 'Sugar', 95.0, 50.0, 'United Kingdom'),
@@ -167,6 +189,8 @@ FERMENTABLE_DB = [
     (r'sugar', 'Sugar', 'Sugar', 100.0, 0.0, 'United Kingdom'),
     # Caramel colouring (handle "caramel XXXX SRM" pattern)
     (r'caramel', 'Caramel Colouring', 'Sugar', 100.0, 2000.0, 'United Kingdom'),
+    # Flavourings (modelled as zero-yield sugar to avoid mash contribution)
+    (r'liquorice|licorice', 'Liquorice', 'Sugar', 0.0, 50.0, 'United Kingdom'),
 ]
 
 # ─── Hop Name Normalisation ──────────────────────────────────────────────────
@@ -284,12 +308,17 @@ def classify_fermentable(raw_name):
             'origin': 'United Kingdom',
         }
 
-    for pattern, name, ftype, fyield, color, origin in FERMENTABLE_DB:
+    for entry in FERMENTABLE_DB:
+        pattern, name, ftype, fyield, color, origin = entry[:6]
+        inferred = (len(entry) > 6 and entry[6] == 'inferred')
         if re.search(pattern, clean, re.IGNORECASE):
-            return {
+            result = {
                 'name': name, 'type': ftype, 'yield': fyield,
                 'color': color, 'origin': origin,
             }
+            if inferred:
+                result['inferred'] = True
+            return result
 
     # Unknown fermentable — assume grain
     return {
@@ -629,6 +658,8 @@ def build_recipe_xml(recipe, alpha_mode, include_narrative):
         info = classify_fermentable(f['raw_name'])
         if info.get('assumed'):
             assumptions.append(f'Grain "{f["raw_name"]}": not recognised, assumed generic Grain 70% yield')
+        elif info.get('inferred'):
+            assumptions.append(f'Grain "{f["raw_name"]}": interpreted as {info["name"]} ({info["yield"]:.0f}% yield)')
         weight_kg = f['weight_lb'] * 0.45359237
         L('  <FERMENTABLE>')
         L(f'   <NAME>{xml_escape(info["name"])}</NAME>')
@@ -925,6 +956,7 @@ def main():
 
     # Generate output
     MODE_DIRS = {'beersmith': 'beerxml', 'historical': 'beerxml-experimental-hop-adjustment'}
+    MODE_LABELS = {'beersmith': 'BeerSmith default alphas', 'historical': 'era-adjusted alphas'}
     for mode in modes:
         mode_dir = os.path.join(args.output, MODE_DIRS[mode])
         os.makedirs(mode_dir, exist_ok=True)
@@ -954,7 +986,7 @@ def main():
                 fpath = os.path.join(mode_dir, fname)
                 with open(fpath, 'w', encoding='utf-8') as f:
                     f.write(xml)
-            print(f"Wrote {len(all_recipes)} individual files to {mode_dir}/ ({mode} alpha mode)",
+            print(f"Wrote {len(all_recipes)} individual files to {mode_dir}/ ({MODE_LABELS[mode]})",
                   file=sys.stderr)
         else:
             xml_parts = ['<?xml version="1.0" encoding="UTF-8"?>', '<RECIPES>']
@@ -966,7 +998,7 @@ def main():
             with open(out_path, 'w', encoding='utf-8') as f:
                 f.write('\n'.join(xml_parts))
 
-            print(f"Wrote {len(all_recipes)} recipes to {out_path} ({mode} alpha mode)",
+            print(f"Wrote {len(all_recipes)} recipes to {out_path} ({MODE_LABELS[mode]})",
                   file=sys.stderr)
 
 
